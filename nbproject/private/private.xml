@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project-private xmlns="http://www.netbeans.org/ns/project-private/1">
+    <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
+    <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
+        <group>
+            <file>file:/E:/cse423/library_management_system/Library%20Management%20System/src/library/management/system/BorrowBook.java</file>
+            <file>file:/E:/cse423/library_management_system/Library%20Management%20System/src/library/management/system/Borrowing.java</file>
+            <file>file:/E:/cse423/library_management_system/Library%20Management%20System/src/library/management/system/CalculateFine.java</file>
+            <file>file:/E:/cse423/library_management_system/Library%20Management%20System/src/library/management/system/Database.java</file>
+            <file>file:/E:/cse423/library_management_system/Library%20Management%20System/src/library/management/system/DeleteAllData.java</file>
+            <file>file:/E:/cse423/library_management_system/Library%20Management%20System/src/library/management/system/DeleteBook.java</file>
+            <file>file:/E:/cse423/library_management_system/Library%20Management%20System/src/library/management/system/Exit.java</file>
+            <file>file:/E:/cse423/library_management_system/Library%20Management%20System/src/library/management/system/IOOperation.java</file>
+            <file>file:/E:/cse423/library_management_system/Library%20Management%20System/src/library/management/system/Main.java</file>
+            <file>file:/E:/cse423/library_management_system/Library%20Management%20System/src/library/management/system/MyOrders.java</file>
+            <file>file:/E:/cse423/library_management_system/Library%20Management%20System/src/library/management/system/NormalUser.java</file>
+            <file>file:/E:/cse423/library_management_system/Library%20Management%20System/src/library/management/system/Order.java</file>
+            <file>file:/E:/cse423/library_management_system/Library%20Management%20System/src/library/management/system/PlaceOrder.java</file>
+            <file>file:/E:/cse423/library_management_system/Library%20Management%20System/src/library/management/system/ReturnBook.java</file>
+            <file>file:/E:/cse423/library_management_system/Library%20Management%20System/src/library/management/system/Search.java</file>
+            <file>file:/E:/cse423/library_management_system/Library%20Management%20System/src/library/management/system/SearchBook.java</file>
+            <file>file:/E:/cse423/library_management_system/Library%20Management%20System/src/library/management/system/User.java</file>
+            <file>file:/E:/cse423/library_management_system/Library%20Management%20System/src/library/management/system/ViewBooks.java</file>
+            <file>file:/E:/cse423/library_management_system/Library%20Management%20System/src/library/management/system/ViewOrders.java</file>
+        </group>
+    </open-files>
+</project-private>

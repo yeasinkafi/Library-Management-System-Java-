@@ -1,0 +1,12 @@
+Name=Yeasin
+PhoneNumber=01777329101
+Email=yasin@gmail.com
+Password=yasin123
+Type=Normal User
+<NewUser/>
+Name=admin
+PhoneNumber=01777329101
+Email=admin@gmail.com
+Password=admin123
+Type=Admin
+<NewUser/>
