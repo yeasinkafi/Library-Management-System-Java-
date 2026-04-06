@@ -30,7 +30,7 @@ public class LibraryService {
         userService.registerUser(registration);
     }
 
-    public List<Book> listBooks() {
+    public java.util.List<Book> listBooks() {
         return bookService.listBooks();
     }
 
@@ -46,11 +46,11 @@ public class LibraryService {
         return bookService.deleteBook(name);
     }
 
-    public List<Order> listOrders() {
+    public java.util.List<Order> listOrders() {
         return orderService.listOrders();
     }
 
-    public List<Order> listOrdersByUser(String phoneNumber) {
+    public java.util.List<Order> listOrdersByUser(String phoneNumber) {
         return orderService.listOrdersByUser(phoneNumber);
     }
 
@@ -58,11 +58,11 @@ public class LibraryService {
         orderService.placeOrder(request);
     }
 
-    public List<Borrowing> listBorrowings() {
+    public java.util.List<Borrowing> listBorrowings() {
         return borrowingService.listBorrowings();
     }
 
-    public List<Borrowing> listBorrowingsByUser(String phoneNumber) {
+    public java.util.List<Borrowing> listBorrowingsByUser(String phoneNumber) {
         return borrowingService.listBorrowingsByUser(phoneNumber);
     }
 

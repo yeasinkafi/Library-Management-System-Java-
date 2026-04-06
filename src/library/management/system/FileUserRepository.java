@@ -97,7 +97,6 @@ public class FileUserRepository implements UserRepository {
             }
         }
 
-        // legacy format support
         if (name == null && block.contains("<N/>")) {
             String[] parts = block.split("<N/>");
             if (parts.length >= 4) {

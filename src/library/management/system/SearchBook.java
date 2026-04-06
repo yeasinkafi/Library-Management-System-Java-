@@ -15,10 +15,12 @@ public class SearchBook implements IOOperation {
 
         showSearchMenu();
         int choice = io.readIntInRange("Choose: ", 1, 3);
-        String key = io.readLine("Enter search text: ");
-        SearchOption option = SearchOption.fromChoice(choice);
 
-        List<Book> result = searchBooks(ctx, option, key);
+        BookSearchStrategy strategy = BookSearchStrategyFactory.fromChoice(choice);
+        String key = io.readLine("Enter " + strategy.getSearchType() + ": ");
+
+        List<Book> result = strategy.search(ctx.bookService(), key);
+
         if (result.isEmpty()) {
             System.out.println("No match found.");
             return;
@@ -35,15 +37,5 @@ public class SearchBook implements IOOperation {
         System.out.println("1. Book name");
         System.out.println("2. Author");
         System.out.println("3. Publisher");
-    }
-
-    private List<Book> searchBooks(AppContext ctx, SearchOption option, String key) {
-        if (option == SearchOption.NAME) {
-            return ctx.bookService().searchByName(key);
-        }
-        if (option == SearchOption.AUTHOR) {
-            return ctx.bookService().searchByAuthor(key);
-        }
-        return ctx.bookService().searchByPublisher(key);
     }
 }

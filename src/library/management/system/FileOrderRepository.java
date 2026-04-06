@@ -101,7 +101,6 @@ public class FileOrderRepository implements OrderRepository {
             }
         }
 
-        // legacy
         if (bookName == null && block.contains("<N/>")) {
             String[] parts = block.split("<N/>");
             if (parts.length >= 4) {

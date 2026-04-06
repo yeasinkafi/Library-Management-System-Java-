@@ -101,7 +101,6 @@ public class FileBookRepository implements BookRepository {
             }
         }
 
-        // legacy support
         if (name == null && block.contains("<N/>")) {
             String[] parts = block.split("<N/>");
             if (parts.length >= 7) {

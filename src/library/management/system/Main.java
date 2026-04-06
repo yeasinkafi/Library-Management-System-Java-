@@ -9,10 +9,12 @@ public class Main {
         ConsoleIO io = new ConsoleIO(scanner);
 
         UserFactory userFactory = new UserFactory();
-        UserRepository userRepo = new FileUserRepository(userFactory);
-        BookRepository bookRepo = new FileBookRepository();
-        OrderRepository orderRepo = new FileOrderRepository();
-        BorrowingRepository borrowingRepo = new FileBorrowingRepository();
+        RepositoryFactory repositoryFactory = new FileRepositoryFactory(userFactory);
+
+        UserRepository userRepo = repositoryFactory.createUserRepository();
+        BookRepository bookRepo = repositoryFactory.createBookRepository();
+        OrderRepository orderRepo = repositoryFactory.createOrderRepository();
+        BorrowingRepository borrowingRepo = repositoryFactory.createBorrowingRepository();
 
         UserService userService = new UserService(userRepo);
         BookService bookService = new BookService(bookRepo);

@@ -111,7 +111,6 @@ public class FileBorrowingRepository implements BorrowingRepository {
             }
         }
 
-        // legacy formats
         if (bookName == null && block.contains("<N/>")) {
             String[] parts = block.split("<N/>");
 
