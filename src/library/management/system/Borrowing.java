@@ -33,4 +33,17 @@ public class Borrowing {
     public long getDaysLeft() {
         return ChronoUnit.DAYS.between(LocalDate.now(), finish);
     }
+
+    public boolean isOverdue() {
+        return LocalDate.now().isAfter(finish);
+    }
+
+    public long daysOverdue() {
+        if (!isOverdue()) return 0;
+        return ChronoUnit.DAYS.between(finish, LocalDate.now());
+    }
+
+    public long calculateFine(long finePerDay) {
+        return daysOverdue() * finePerDay;
+    }
 }

@@ -4,106 +4,83 @@ import java.util.Scanner;
 
 public class Main {
 
-    private static final Scanner SCANNER = new Scanner(System.in);
-
     public static void main(String[] args) {
-        Database database = new Database();
-        database.readUsers();
-        database.readBooks();
-        database.readOrders();
-        database.readBorrowings();
+        Scanner scanner = new Scanner(System.in);
+        ConsoleIO io = new ConsoleIO(scanner);
 
-        int num;
-        do {
-            System.out.println("\n=== Library Management System ===");
-            System.out.println("0. Exit");
-            System.out.println("1. Login");
-            System.out.println("2. New User");
+        UserFactory userFactory = new UserFactory();
+        UserRepository userRepo = new FileUserRepository(userFactory);
+        BookRepository bookRepo = new FileBookRepository();
+        OrderRepository orderRepo = new FileOrderRepository();
+        BorrowingRepository borrowingRepo = new FileBorrowingRepository();
 
-            num = readIntInRange("Choose option: ", 0, 2);
+        UserService userService = new UserService(userRepo);
+        BookService bookService = new BookService(bookRepo);
+        OrderService orderService = new OrderService(orderRepo);
+        BorrowingService borrowingService = new BorrowingService(borrowingRepo, bookService);
+        DataService dataService = new DataService(userRepo, bookRepo, orderRepo, borrowingRepo);
 
-            switch (num) {
-                case 1:
-                    login(database);
-                    break;
-                case 2:
-                    newUser(database);
-                    break;
-                case 0:
-                    System.out.println("Goodbye!");
-                    break;
+        AppContext ctx = new AppContext(userService, bookService, orderService, borrowingService, dataService, io);
+
+        while (true) {
+            showWelcomeMenu();
+            int choice = io.readIntInRange("Choose option: ", 0, 2);
+            if (choice == 0) {
+                System.out.println("Goodbye!");
+                return;
             }
-        } while (num != 0);
+            if (choice == 1) {
+                login(ctx);
+            } else {
+                createNewUser(ctx);
+            }
+        }
     }
 
-    private static void login(Database database) {
-        System.out.print("Enter phone number: ");
-        String phonenumber = SCANNER.nextLine().trim();
+    private static void showWelcomeMenu() {
+        System.out.println("\n=== Library Management System ===");
+        System.out.println("0. Exit");
+        System.out.println("1. Login");
+        System.out.println("2. New User");
+    }
 
-        System.out.print("Enter email: ");
-        String email = SCANNER.nextLine().trim();
+    private static void login(AppContext ctx) {
+        ConsoleIO io = ctx.io();
+        String phone = io.readLine("Enter phone number: ");
+        String email = io.readLine("Enter email: ");
+        String password = io.readLine("Enter password: ");
 
-        System.out.print("Enter password: ");
-        String password = SCANNER.nextLine().trim();
-
-        User user = database.login(phonenumber, email, password);
+        LoginRequest request = new LoginRequest(phone, email, password);
+        User user = ctx.userService().login(request).orElse(null);
         if (user == null) {
             System.out.println("Invalid credentials!");
             return;
         }
-        user.menu(database, SCANNER);
+        user.menu(ctx);
     }
 
-    private static void newUser(Database database) {
+    private static void createNewUser(AppContext ctx) {
+        ConsoleIO io = ctx.io();
+
         System.out.println("\n=== Create New User ===");
-        System.out.print("Name: ");
-        String name = SCANNER.nextLine().trim();
+        String name = io.readLine("Name: ");
+        String phone = io.readLine("Phone Number: ");
+        String email = io.readLine("Email: ");
+        String password = io.readLine("Password: ");
+        UserType type = readUserType(io);
 
-        System.out.print("Phone Number: ");
-        String phoneNumber = SCANNER.nextLine().trim();
-
-        System.out.print("Email: ");
-        String email = SCANNER.nextLine().trim();
-
-        System.out.print("Password: ");
-        String password = SCANNER.nextLine().trim();
-
-        String userType;
-        while (true) {
-            System.out.print("User Type (Admin/Normal User): ");
-            userType = SCANNER.nextLine().trim();
-            if (userType.equalsIgnoreCase("Admin") || userType.equalsIgnoreCase("Normal User")) {
-                break;
-            }
-            System.out.println("Invalid type. Please enter 'Admin' or 'Normal User'.");
-        }
-
-        User user;
-        if (userType.equalsIgnoreCase("Admin")) {
-            user = new Admin(name, phoneNumber, email, password);
-        } else {
-            user = new NormalUser(name, phoneNumber, email, password);
-        }
-
-        database.addUser(user);
-        database.saveUsers();
-        System.out.println("User created successfully!");
+        UserRegistration registration = new UserRegistration(name, phone, email, password, type);
+        ctx.userService().registerUser(registration);
+        System.out.println("User created. You can login now.");
     }
 
-    private static int readIntInRange(String prompt, int min, int max) {
+    private static UserType readUserType(ConsoleIO io) {
         while (true) {
-            System.out.print(prompt);
-            String input = SCANNER.nextLine().trim();
-            try {
-                int val = Integer.parseInt(input);
-                if (val < min || val > max) {
-                    System.out.println("Please enter a number between " + min + " and " + max + ".");
-                    continue;
-                }
-                return val;
-            } catch (NumberFormatException e) {
-                System.out.println("Invalid number. Try again.");
+            String userTypeText = io.readLine("User Type (Admin/Normal User): ");
+            if (userTypeText.equalsIgnoreCase("Admin") || userTypeText.equalsIgnoreCase("Normal User")) {
+                return UserType.fromUserInput(userTypeText);
             }
+            System.out.println("Please type Admin or Normal User.");
         }
     }
 }

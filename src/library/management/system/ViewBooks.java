@@ -1,24 +1,30 @@
 package library.management.system;
 
-import java.util.Scanner;
+import java.util.List;
 
 public class ViewBooks implements IOOperation {
     @Override
-    public void oper(Database database, User user, Scanner scanner) {
-        System.out.println("\n=== Books ===");
-        if (database.getBooks().isEmpty()) {
-            System.out.println("No books available.");
+    public String label() {
+        return "View Books";
+    }
+
+    @Override
+    public void oper(AppContext ctx, User user) {
+        List<Book> books = ctx.bookService().listBooks();
+        if (books.isEmpty()) {
+            System.out.println("No books found.");
             return;
         }
-        for (Book book : database.getBooks()) {
-            System.out.println("-----------------------------------");
-            System.out.println("Name: " + book.getName());
-            System.out.println("Author: " + book.getAuthor());
-            System.out.println("Publisher: " + book.getPublisher());
-            System.out.println("Quantity (for sell): " + book.getQty());
-            System.out.println("Borrowable Copies: " + book.getBrwcopies());
-            System.out.println("Price: " + book.getPrice());
+
+        System.out.println("\n--- Books ---");
+        for (Book b : books) {
+            System.out.println("Name: " + b.getName());
+            System.out.println("Author: " + b.getAuthor());
+            System.out.println("Publisher: " + b.getPublisher());
+            System.out.println("Quantity: " + b.getQty());
+            System.out.println("Borrow Copies: " + b.getBrwcopies());
+            System.out.println("Price: " + b.getPrice());
+            System.out.println();
         }
-        System.out.println("-----------------------------------");
     }
 }

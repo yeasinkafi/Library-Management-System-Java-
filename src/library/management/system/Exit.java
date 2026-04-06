@@ -1,12 +1,14 @@
 package library.management.system;
 
-import java.util.Scanner;
-
 public class Exit implements IOOperation {
+    @Override
+    public String label() {
+        return "Exit";
+    }
 
     @Override
-    public void oper(Database database, User user, Scanner scanner) {
-        System.out.println("Exiting program...");
+    public void oper(AppContext ctx, User user) {
+        System.out.println("Goodbye.");
         System.exit(0);
     }
 }

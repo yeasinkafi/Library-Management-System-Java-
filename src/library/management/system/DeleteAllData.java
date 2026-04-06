@@ -1,20 +1,20 @@
 package library.management.system;
 
-import java.util.Scanner;
-
 public class DeleteAllData implements IOOperation {
 
     @Override
-    public void oper(Database database, User user, Scanner scanner) {
-        System.out.println("\n=== Delete All Data ===");
-        System.out.print("Are you sure? Type YES to confirm: ");
-        String confirm = scanner.nextLine().trim();
+    public String label() {
+        return "Delete All Data";
+    }
 
-        if (confirm.equalsIgnoreCase("YES")) {
-            database.deleteAllData();
-            System.out.println("All data deleted.");
-        } else {
+    @Override
+    public void oper(AppContext ctx, User user) {
+        String ans = ctx.io().readLine("Are you sure? type YES to confirm: ");
+        if (!"YES".equalsIgnoreCase(ans.trim())) {
             System.out.println("Cancelled.");
+            return;
         }
+        ctx.dataService().deleteAllData();
+        System.out.println("All data deleted.");
     }
 }
