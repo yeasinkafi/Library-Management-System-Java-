@@ -46,7 +46,7 @@ Here is where we applied each one and why.
 
 **The Problem in Version 1:**
 
-The `Database` class was doing everything. It was reading files, writing files, parsing data, storing data in memory, AND handling business logic like confirming orders and borrowing books — all in one 500+ line class.
+The `Database` class was doing everything. It was reading files, writing files, parsing data, storing data in memory, AND handling business logic like confirming orders and borrowing books, all in one 500+ line class.
 
 The `Admin` and `NormalUser` classes also had a mix of menu display, input handling, and their own utility methods.
 
@@ -85,7 +85,7 @@ Menu text was hardcoded separately from the operations array. Adding a new menu 
 
 We created a `BookSearchStrategy` interface. Each search type (by name, by author, by publisher) became its own small class. Adding a new search type now only requires adding a new class — `SearchBook` itself never needs to change.
 
-The `IOOperation` interface now includes a `label()` method. The menu is generated automatically from the operations array. Adding a new operation means creating a new class and adding it to the array — the menu updates on its own.
+The `IOOperation` interface now includes a `label()` method. The menu is generated automatically from the operations array. Adding a new operation means creating a new class and adding it to the array, the menu updates on its own.
 
 **Classes involved:** `BookSearchStrategy`, `SearchByNameStrategy`, `SearchByAuthorStrategy`, `SearchByPublisherStrategy`, `BookSearchStrategyFactory`, `IOOperation`
 
@@ -102,7 +102,7 @@ Some operation classes were closing `System.in` (the Scanner) while others were 
 
 **What We Fixed in Version 2:**
 
-Removed the `instanceof` check from `ViewOrders`. Admin-only actions now live inside Admin's own operations array — Normal Users never even see those options.
+Removed the `instanceof` check from `ViewOrders`. Admin-only actions now live inside Admin's own operations array on the other hand Normal Users never even see those options.
 
 Introduced `ConsoleIO` which holds a single shared Scanner. No operation class closes it. Every operation reads input the same safe way. You can now swap any operation for another without side effects.
 
@@ -183,9 +183,9 @@ We decomposed `Database.java` into 8 smaller, focused classes. Four repository c
 
 **Where We Found It:** `Database.java`, `SearchBook.java`, `CalculateFine.java`, `Main.java`
 
-Methods in Version 1 were doing too many steps at once — reading user input, validating it, running business logic, and printing output, all inside the same method. Some methods were 50–80 lines long with no clear structure.
+Methods in Version 1 were doing too many steps at once: reading user input, validating it, running business logic, and printing output, all inside the same method. Some methods were 50–80 lines long with no clear structure.
 
-For example, the search method in `SearchBook` was handling the menu display, reading the choice, running the search, and printing results — four different jobs in one method.
+For example, the search method in `SearchBook` was handling the menu display, reading the choice, running the search, and printing results: four different jobs in one method.
 
 **How We Solved It:**
 
@@ -238,7 +238,7 @@ if (borrowing.isOverdue()) {
 }
 ```
 
-The data and the behavior that works on that data now live in the same class — which is where they belong.
+The data and the behavior that works on that data now live in the same class, which is where they belong.
 
 ---
 
@@ -258,9 +258,9 @@ And `UserFactory` used similar `if/else` chains to decide which type of `User` o
 
 **How We Solved It:**
 
-For search — we replaced the `if/else` chain with the Strategy Pattern. Each option became its own class. `BookSearchStrategyFactory` picks the right one. `SearchBook` never needs to change when a new type is added.
+For search, we replaced the `if/else` chain with the Strategy Pattern. Each option became its own class. `BookSearchStrategyFactory` picks the right one. `SearchBook` never needs to change when a new type is added.
 
-For user creation — `UserType` enum now acts as a factory. Each enum value (`ADMIN`, `NORMAL_USER`) has its own `createUser()` method. Adding a new user type means adding a new enum value — no `if/else` chains anywhere.
+For user creation, the `UserType` enum now acts as a factory. Each enum value (`ADMIN`, `NORMAL_USER`) has its own `createUser()` method. Adding a new user type means adding a new enum value — no `if/else` chains anywhere.
 
 ---
 
@@ -329,7 +329,7 @@ Now the number has a name. One place to change. The code explains itself.
 
 **Where We Found It:** `Book.java`, `Order.java`, `User.java`
 
-These classes only had fields and getters/setters. They had no real behavior of their own. All logic that worked on their data lived elsewhere — mostly inside `Database.java` or `CalculateFine.java`. This separates data from behavior, which is the opposite of good object-oriented design.
+These classes only had fields and getters/setters. They had no real behavior of their own. All logic that worked on their data lived elsewhere, mostly inside `Database.java` or `CalculateFine.java`. This separates data from behavior, which is the opposite of good object-oriented design.
 
 **How We Solved It:**
 
@@ -348,7 +348,7 @@ ctx.getService().getBooks()
 ctx.getLibrary().getBorrowingService().findAll()
 ```
 
-The caller had to know too much about the internal structure of multiple objects just to get what it needed. This creates tight coupling — if the internal structure changes, every chain that goes through it breaks.
+The caller had to know too much about the internal structure of multiple objects just to get what it needed. This creates tight coupling. If the internal structure changes, every chain that goes through it breaks.
 
 **How We Solved It:**
 
@@ -362,21 +362,9 @@ ctx.orderService()
 
 Each operation pulls exactly what it needs in one call. No chains, no deep navigation.
 
----
 
-### Smell 10 — Dead Code
 
-**Where We Found It:** `Search.java` (in both versions), `Database.java` (left in Version 2 unused)
 
-`Search.java` contains `linearSearch()` and `binarySearch()` methods that work on integer arrays. These methods are never called anywhere in the application. They were likely written as an early experiment but never properly connected to the actual search feature.
-
-`Database.java` from Version 1 was copied into Version 2 and left there — even though the entire new architecture replaced it completely. It sits there unused and confusing.
-
-**How We Solved It (should be done):**
-
-Both files should simply be deleted. Dead code adds confusion without adding any value. A future developer reading the project would not know whether these files are still in use or not.
-
----
 
 ## 🎨 Design Patterns
 
@@ -443,7 +431,7 @@ io.readLine("Enter " + strategy.getSearchType() + ": ");
 
 1. We have a family of related algorithms (search by name, author, publisher) that need to be interchangeable.
 2. We want to add new search types without touching existing code (OCP).
-3. The prompt label (`"Enter Book name: "` vs `"Enter Author: "`) now comes from the strategy itself via `getSearchType()` — so everything about a search type lives in one class.
+3. The prompt label (`"Enter Book name: "` vs `"Enter Author: "`) now comes from the strategy itself via `getSearchType()`  so everything about a search type lives in one class.
 
 > Adding "Search by ISBN" would mean: create `SearchByISBNStrategy.java` (10 lines) + add `case 4` to `BookSearchStrategyFactory`. `SearchBook.java` never changes.
 
@@ -502,11 +490,11 @@ In `Main.java`, only **ONE line** decides the storage system:
 RepositoryFactory factory = new FileRepositoryFactory(userFactory);
 ```
 
-Everything built from there — all services, all operations — only ever sees the repository interfaces, never the concrete file classes.
+Everything built from there, all services, all operations only ever sees the repository interfaces, never the concrete file classes.
 
 **Why We Chose This Pattern:**
 
-1. You have a **family** of related objects that must be used together (all 4 repositories must be file-based OR all database-based — never mixed). The factory guarantees this consistency.
+1. You have a **family** of related objects that must be used together (all 4 repositories must be file-based OR all database-based, never mixed). The factory guarantees this consistency.
 2. You want the rest of the system to be completely unaware of which concrete family is in use.
 3. You want to swap the entire storage system by changing one line of code.
 
